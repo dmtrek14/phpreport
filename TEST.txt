@@ -6,3 +6,5 @@ adding 5th line
 adding 6th line
 adding 7th line
 adding 8th line
+adding 9th line
+adding 10th line

@@ -28,45 +28,38 @@
  * @subpackage util
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
-
+require_once(PHPREPORT_ROOT . '/vendor/autoload.php');
 include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
-require_once(PHPREPORT_ROOT . '/config/config.php');
-
 /** Configuration parameters manager
  *
  *  This class is used for obtaining configuration parameters values from the file {@link config.php}.
  *
  * @see config.php
  */
-class ConfigurationParametersManager {
+class ConfigurationParametersManager
+{
+  /** Parameters values retriever.
+   *
+   * This function retrieves the value of the parameter with the name <var>$parameterName</var>.
+   *
+   * @param string $parameterName the name of the parameter we want to retrieve.
+   * @return string the value of the parameter.
+   * @throws {@link UnknownParameterException}
+   */
+  public static function getParameter($parameterName)
+  {
+    if (!defined('ENV_LOADED')) {
+      $dotenv = Dotenv\Dotenv::createMutable(PHPREPORT_ROOT);
+      $dotenv->load();
+      define('ENV_LOADED', true);
+    }
 
+    $parameterValue = $_SERVER[$parameterName] ?? NULL;
 
-    /** Parameters values retriever.
-     *
-     * This function retrieves the value of the parameter with the name <var>$parameterName</var>.
-     *
-     * @param string $parameterName the name of the parameter we want to retrieve.
-     * @return string the value of the parameter.
-     * @throws {@link UnknownParameterException}
-     */
-  public static function getParameter($parameterName) {
-
-    if (defined($parameterName))
-      return constant($parameterName);
+    if (!is_null($parameterValue) and $parameterValue !== false) {
+      return trim($parameterValue, '"');
+    }
 
     throw new UnknownParameterException($parameterName);
   }
-
 }
-
-
-/*// Test code
-echo ConfigurationParametersManager::getParameter('DB_PORT');
-echo "\n";
-echo ConfigurationParametersManager::getParameter('USER_DAO');
-echo "\n";
-echo ConfigurationParametersManager::getParameter('TASK_DAO');
-echo "\n";
-echo ConfigurationParametersManager::getParameter('unknownParameter');
-echo "\n";
-*/

@@ -15,6 +15,11 @@ phpreport*.zip
 #default config file
 config/config.defaults
 
+.env
+docker/.env
+
+frontend/node_modules
+
 #minified JS and source maps
 *.min.js
 *.min.js.map
@@ -24,3 +29,11 @@ vendor
 
 # do not ignore vue.js and v-calendar files
 !web/vuejs/*.min.js
+
+# Python libs
+.venv
+__pycache__
+.tox
+*.egg-info
+
+web/v2/assets/
